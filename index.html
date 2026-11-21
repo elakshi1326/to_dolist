@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Tasks</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 48px 20px;
+      background: #f4f6fb;
+      color: #24243a;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app {
+      width: min(100%, 720px);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    header { margin-bottom: 28px; }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 2.7rem);
+    }
+
+    .subtitle { margin: 8px 0 0; color: #74778b; }
+
+    .panel {
+      padding: 24px;
+      border: 1px solid #e8eaf1;
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 14px 40px #29294a0c;
+    }
+
+    .task-form {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .task-form input {
+      flex: 1;
+      min-width: 0;
+      padding: 13px 15px;
+      border: 1px solid #dedfeb;
+      border-radius: 10px;
+      font: inherit;
+    }
+
+    button {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 10px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .add-button { background: #6958df; color: white; }
+    .add-button:hover { background: #5746cd; }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    h2 { margin: 0; font-size: 1.05rem; }
+    .task-count { color: #85889a; font-size: .9rem; }
+
+    .task-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid #eceef4;
+      border-radius: 12px;
+    }
+
+    .task input[type="checkbox"] {
+      flex: 0 0 18px;
+      margin-left: auto;
+    }
+
+    .task-title { flex: 1; }
+    .task.completed .task-title { color: #999bab; text-decoration: line-through; }
+
+    .delete-button {
+      padding: 7px 10px;
+      background: #fff1f1;
+      color: #bd4753;
+      font-size: .9rem;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 24px 14px; }
+      .panel { padding: 18px; }
+      .task-form { flex-direction: column; }
+      .add-button { width: 100%; }
+    }
+
+    /* Background gradients */
+    body {
+      background:
+        radial-gradient(ellipse at 10% 10%, #dcd7ff 0, transparent 38%),
+        radial-gradient(ellipse at 90% 85%, #c9eff0 0, transparent 40%),
+        linear-gradient(135deg, #f8f7ff, #eef5ff);
+    }
+
+    body::after {
+      content: "“Small steps every day lead to big changes.”";
+      position: fixed;
+      right: 5%;
+      bottom: 6%;
+      z-index: 0;
+      width: min(320px, 40vw);
+      color: #6958df;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 700;
+      line-height: 1.3;
+      text-align: right;
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    @media (max-width: 480px) {
+      body::after {
+        right: 14px;
+        bottom: 12px;
+        width: 200px;
+        font-size: 1.1rem;
+      }
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 32px;
+      color: #5f5c78;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    footer .developer-name {
+      font-weight: 700;
+    }
+
+    .celebration {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #000;
+      color: #fff;
+      font-size: clamp(2rem, 7vw, 4rem);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .celebration.show {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>My Tasks</h1>
+      <p class="subtitle">Keep track of what you need to get done.</p>
+    </header>
+
+    <section class="panel" aria-label="To-do list">
+      <form class="task-form">
+        <input type="text" placeholder="Add a new task..." aria-label="New task">
+        <button class="add-button" type="submit">Add task</button>
+      </form>
+
+      <div class="section-heading">
+        <h2>Today</h2>
+        <span class="task-count">3 tasks</span>
+      </div>
+
+      <ul class="task-list">
+        <li class="task">
+          <input type="checkbox" aria-label="Complete Review project notes">
+          <span class="task-title">Review project notes</span>
+          <button class="delete-button" type="button">Delete</button>
+        </li>
+        <li class="task completed">
+          <input type="checkbox" checked aria-label="Complete Reply to emails">
+          <span class="task-title">Reply to emails</span>
+          <button class="delete-button" type="button">Delete</button>
+        </li>
+        <li class="task">
+          <input type="checkbox" aria-label="Complete Plan the week">
+          <span class="task-title">Plan the week</span>
+          <button class="delete-button" type="button">Delete</button>
+        </li>
+      </ul>
+    </section>
+
+    <div class="celebration" role="status" aria-live="polite">
+      Great work, dude!
+    </div>
+  </main>
+
+  <footer>
+    <p class="developer-name">Developed by Elakshi Sood</p>
+    <p>BTech CSE AI · 1st Sem</p>
+  </footer>
+
+  <script>
+  const form = document.querySelector(".task-form");
+  const input = form.querySelector("input");
+  const taskList = document.querySelector(".task-list");
+  const taskCount = document.querySelector(".task-count");
+  const celebration = document.querySelector(".celebration");
+  let celebrationTimer;
+
+  function updateTaskCount() {
+    const count = taskList.querySelectorAll(".task").length;
+    taskCount.textContent = `${count} task${count === 1 ? "" : "s"}`;
+  }
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const title = input.value.trim();
+    if (!title) return;
+
+    const task = document.createElement("li");
+    task.className = "task";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.setAttribute("aria-label", `Complete ${title}`);
+
+    const taskTitle = document.createElement("span");
+    taskTitle.className = "task-title";
+    taskTitle.textContent = title;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "delete-button";
+    deleteButton.type = "button";
+    deleteButton.textContent = "Delete";
+
+    task.append(taskTitle, checkbox, deleteButton);
+    taskList.append(task);
+
+    input.value = "";
+    input.focus();
+    updateTaskCount();
+  });
+
+  taskList.addEventListener("click", event => {
+    if (event.target.matches(".delete-button")) {
+      event.target.closest(".task").remove();
+      updateTaskCount();
+    }
+  });
+
+  taskList.addEventListener("change", event => {
+    if (event.target.matches('input[type="checkbox"]')) {
+      const isCompleted = event.target.checked;
+      event.target.closest(".task").classList.toggle("completed", isCompleted);
+
+      if (isCompleted) {
+        clearTimeout(celebrationTimer);
+        celebration.classList.add("show");
+        celebrationTimer = setTimeout(() => {
+          celebration.classList.remove("show");
+        }, 2000);
+      }
+    }
+  });
+
+  updateTaskCount();
+</script>
+</body>
+</html>
